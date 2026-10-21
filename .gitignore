@@ -1,0 +1,7 @@
+tools/
+out/
+*.apk
+*.apkm
+*.jks
+*.keystore
+*.dex
