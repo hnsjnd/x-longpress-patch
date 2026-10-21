@@ -36,6 +36,8 @@ public final class LongPressSpeed {
     public static String PARAMS_CLASS = "androidx.media3.common.PlaybackParameters"; // patched
     static final long LONG_PRESS_MS = 250;
     static final float FAST = 2f;
+    /** X already shows its own speed indicator when the rate changes, so our pill is off. */
+    static final boolean SHOW_HINT = false;
 
     private static final List<WeakReference<Object>> players = new ArrayList<>();
     private static boolean inited;
@@ -160,6 +162,7 @@ public final class LongPressSpeed {
         }};
 
         void showHint(boolean show) {
+            if (!SHOW_HINT && show) return;
             Activity a = act.get(); if (a == null) return;
             ViewGroup decor = (ViewGroup) a.getWindow().getDecorView();
             float dp = a.getResources().getDisplayMetrics().density;
