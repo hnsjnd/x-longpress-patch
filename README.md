@@ -24,6 +24,6 @@ Tested against X 12.36.1-prod.01 (Media3: ExoPlayerImpl=`h0`, PlaybackParameters
 
 ## Build
 ```
-./build.sh X_12.36.1.apkm my.jks storepass   # -> out/X-longpress.apk
+VERSION_CODE_BUMP=1 ./build.sh X_12.36.1.apkm my.jks storepass   # -> out/X-longpress.apk (bump optional)
 ```
 Needs JDK 17, Android SDK build-tools (aapt, d8, zipalign, apksigner), Python 3.

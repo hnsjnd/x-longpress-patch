@@ -162,22 +162,29 @@ public final class LongPressSpeed {
         void showHint(boolean show) {
             Activity a = act.get(); if (a == null) return;
             ViewGroup decor = (ViewGroup) a.getWindow().getDecorView();
+            float dp = a.getResources().getDisplayMetrics().density;
             if (hint == null) {
                 hint = new TextView(a);
                 hint.setText("2x \u25B6\u25B6");
                 hint.setTextColor(Color.WHITE);
-                hint.setTextSize(14);
-                int p = (int) (8 * a.getResources().getDisplayMetrics().density);
-                hint.setPadding(p * 2, p, p * 2, p);
+                hint.setTextSize(12);
+                hint.setPadding((int) (10 * dp), (int) (3 * dp), (int) (10 * dp), (int) (3 * dp));
                 GradientDrawable bg = new GradientDrawable();
-                bg.setColor(0x99000000); bg.setCornerRadius(p * 3);
+                bg.setColor(0x80000000); bg.setCornerRadius(12 * dp);
                 hint.setBackground(bg);
+                hint.setClickable(false); hint.setFocusable(false);
             }
             if (show) {
                 if (hint.getParent() == null) {
+                    int top = 0;
+                    WindowInsets wi = decor.getRootWindowInsets();
+                    if (wi != null) top = wi.getSystemWindowInsetTop();
+                    if (top == 0) {
+                        int id = a.getResources().getIdentifier("status_bar_height", "dimen", "android");
+                        if (id > 0) top = a.getResources().getDimensionPixelSize(id);
+                    }
                     FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                    lp.topMargin = (int) (sy - 120 * a.getResources().getDisplayMetrics().density);
-                    if (lp.topMargin < 0) lp.topMargin = (int) (sy + 40 * a.getResources().getDisplayMetrics().density);
+                    lp.topMargin = top + (int) (56 * dp);
                     decor.addView(hint, lp);
                 }
             } else if (hint.getParent() != null) {

@@ -76,3 +76,12 @@ out = os.environ.get("EXT_DEX_OUT", f"{d}/../classes{n}.dex")
 shutil.copy(f"{tmp}/classes.dex", out)
 open(os.path.join(os.path.dirname(out), "ext_dex_name"), "w").write(f"classes{n}.dex")
 print("extension dex ->", out, "as", f"classes{n}.dex")
+
+# optional: bump versionCode in the raw binary manifest so a rebuilt patch upgrades over the previous one
+bump = int(os.environ.get("VERSION_CODE_BUMP", "0"))
+if bump:
+    import struct
+    vc = int(re.search(r"versionCode='(\d+)'", subprocess.check_output([f"{BT}/aapt", "dump", "badging", apk_in], text=True)).group(1))
+    mp = f"{d}/AndroidManifest.xml"; b = open(mp, "rb").read(); o = struct.pack("<I", vc)
+    assert b.count(o) == 1, "versionCode not uniquely found"
+    open(mp, "wb").write(b.replace(o, struct.pack("<I", vc + bump))); print("versionCode", vc, "->", vc + bump)
